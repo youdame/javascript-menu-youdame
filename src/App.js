@@ -89,7 +89,8 @@ class App {
   category = [];
 
   async run() {
-    OutputView.printMessage('점심 메뉴 추천을 시작합니다.\n');
+    OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
+
     const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
 
     const names = nameInput.split(',');
@@ -97,13 +98,9 @@ class App {
     for (const name of names) {
       await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
     }
-
+    OutputView.printMessage('\n');
     OutputView.printMessage('메뉴 추천 결과입니다.\n');
     OutputView.printMessage('[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]');
-    /*
-      월화수목금 카테고리 선택
-
-    */
 
     for (let i = 1; i <= 5; i++) {
       const randomNumber = Random.pickNumberInRange(1, 5);
