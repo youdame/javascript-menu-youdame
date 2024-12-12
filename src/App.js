@@ -103,7 +103,14 @@ class App {
     OutputView.printMessage('[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]');
 
     for (let i = 1; i <= 5; i++) {
-      const randomNumber = Random.pickNumberInRange(1, 5);
+      let randomNumber = Random.pickNumberInRange(1, 5);
+
+      const filteredCategory = this.category.filter((category) => category === categories[randomNumber]);
+
+      if (filteredCategory.length >= 2) {
+        randomNumber = Random.pickNumberInRange(1, 5);
+      }
+
       this.category.push(categories[randomNumber]);
     }
 
