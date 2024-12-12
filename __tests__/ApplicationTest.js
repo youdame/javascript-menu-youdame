@@ -1,15 +1,21 @@
 import { MissionUtils } from '@woowacourse/mission-utils';
 import App from '../src/App.js';
 
-const mockQuestions = (answers) => {
-  MissionUtils.Console.readLine = jest.fn();
-  answers.reduce(
-    (acc, input) =>
-      acc.mockImplementationOnce((_, callback) => {
-        callback(input);
-      }),
-    MissionUtils.Console.readLine,
-  );
+const mockQuestions = (inputs) => {
+  const messages = [];
+
+  MissionUtils.Console.readLineAsync = jest.fn((prompt) => {
+    messages.push(prompt);
+    const input = inputs.shift();
+
+    if (input === undefined) {
+      throw new Error('NO INPUT');
+    }
+
+    return Promise.resolve(input);
+  });
+
+  MissionUtils.Console.readLineAsync.messages = messages;
 };
 
 const mockRandoms = (numbers) => {
@@ -70,6 +76,7 @@ describe('점심 메뉴 테스트', () => {
 
       const app = new App();
       app.run();
+
       const log = getOutput(logSpy);
 
       expect(log.replace(/\n/g, '')).toEqual(
