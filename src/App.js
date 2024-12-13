@@ -2,7 +2,6 @@
 import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
-import shuffle from './util/shuffle.js';
 
 /*
 점심 메뉴 추천을 시작합니다.
@@ -27,54 +26,6 @@ import shuffle from './util/shuffle.js';
 [ 포코 | 된장찌개 | 불고기 | 하이라이스 | 탕수육 | 나시고렝 ]
 
 추천을 완료했습니다.
-*/
-
-/*
-  describe('전체 기능 테스트', () => {
-    test('카테고리 메뉴 중복 없는 추천', () => {
-      const logSpy = getLogSpy();
-
-      mockRandoms([2, 5, 1, 3, 4]);
-      mockQuestions(['구구,제임스', '김밥', '떡볶이']);
-
-      const sequenced = (_, idx) => idx + 1;
-      mockShuffles([
-        // 구구
-        [2, Array.from({ length: 9 }, sequenced)],
-        [7, Array.from({ length: 9 }, sequenced)],
-        [1, Array.from({ length: 9 }, sequenced)],
-        [4, Array.from({ length: 9 }, sequenced)],
-        [2, Array.from({ length: 9 }, sequenced)],
-
-        // 제임스
-        [9, Array.from({ length: 9 }, sequenced)],
-        [1, Array.from({ length: 9 }, sequenced)],
-        [5, Array.from({ length: 9 }, sequenced)],
-        [5, Array.from({ length: 9 }, sequenced)],
-        [4, Array.from({ length: 9 }, sequenced)],
-      ]);
-
-      const app = new App();
-      app.run();
-
-      const log = getOutput(logSpy);
-
-      expect(log.replace(/\n/g, '')).toEqual(
-        expect.stringContaining(
-          [
-            '점심 메뉴 추천을 시작합니다.',
-            '메뉴 추천 결과입니다.',
-            '[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]',
-            '[ 카테고리 | 한식 | 양식 | 일식 | 중식 | 아시안 ]',
-            '[ 구구 | 김치찌개 | 스파게티 | 규동 | 짜장면 | 카오 팟 ]',
-            '[ 제임스 | 제육볶음 | 라자냐 | 가츠동 | 짬뽕 | 파인애플 볶음밥 ]',
-            '추천을 완료했습니다.',
-          ].join(''),
-        ),
-      );
-    });
-  });
-});
 */
 
 const Menu = {
@@ -159,15 +110,6 @@ class App {
         return menu;
       }
     }
-
-    /* 못 먹는 음식이면 다시 섞어야함 
-    자기가 못 먹는 음식을 추천하진 않을테니,
-    그걸 알려면 지금 코치가 누구인지, 못 먹는 음식이랑 지금 뽑힌 음식이 같은지 알아야함
-    근데 솔직히 무슨 카테고린지 알아야하나? 
-    성능 따지려면 카테고리부터 따지는 게 맞긴함
-
-    일단은 메뉴 이름이 같은지만 보면 될듯
-    */
   }
 }
 
