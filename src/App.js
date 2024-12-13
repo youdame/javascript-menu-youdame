@@ -2,6 +2,7 @@
 import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
+import validateNameInput from './validation/validateNameInput.js';
 
 /*
 점심 메뉴 추천을 시작합니다.
@@ -55,15 +56,22 @@ class App {
   async run() {
     OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
 
-    const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
+    while (true) {
+      try {
+        const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
 
-    const coachesName = nameInput.split(',');
-
-    for (const name of coachesName) {
-      this.coachesInfo[name] = [];
+        validateNameInput(nameInput);
+        const coachesName = nameInput.split(',');
+        for (const name of coachesName) {
+          this.coachesInfo[name] = [];
+        }
+        break;
+      } catch (error) {
+        OutputView.printErrorMessage(error);
+      }
     }
 
-    for (const name of coachesName) {
+    for (const name of Object.keys(this.coachesInfo)) {
       const notFood = await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
       this.coachesInfo[name].push(notFood);
     }
