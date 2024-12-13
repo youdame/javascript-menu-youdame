@@ -153,7 +153,7 @@ class App {
       const currentCategory = this.category[index];
       const foodList = Menu[currentCategory];
 
-      const menu = shuffle(foodList)[0];
+      const menu = foodList[Random.shuffle(foodList)[0] - 1];
 
       if (!notFood.includes(menu)) {
         return menu;

@@ -24,14 +24,6 @@ const mockRandoms = (numbers) => {
   numbers.reduce((acc, number) => acc.mockReturnValueOnce(number), MissionUtils.Random.pickNumberInRange);
 };
 
-const mockShuffles = (rows) => {
-  const mockShuffle = jest.fn(shuffle);
-
-  rows.reduce((acc, [firstNumber, numbers]) => acc.mockReturnValueOnce([firstNumber, ...numbers.filter((number) => number !== firstNumber)]), mockShuffle);
-
-  return mockShuffle;
-};
-
 const getLogSpy = () => {
   const logSpy = jest.spyOn(MissionUtils.Console, 'print');
   return logSpy;
@@ -44,6 +36,16 @@ const expectLogContains = (received, logs) => {
     expect(received).toEqual(expect.stringContaining(log));
   });
 };
+
+const mockShuffles = (rows) => {
+  MissionUtils.Random.shuffle = jest.fn();
+
+  rows.reduce(
+    (acc, [firstNumber, numbers]) => acc.mockReturnValueOnce([firstNumber, ...numbers.filter((number) => number !== firstNumber)]),
+    MissionUtils.Random.shuffle,
+  );
+};
+
 describe('점심 메뉴 테스트', () => {
   afterEach(() => {
     jest.clearAllMocks();
