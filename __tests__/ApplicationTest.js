@@ -1,5 +1,6 @@
 import { MissionUtils } from '@woowacourse/mission-utils';
 import App from '../src/App.js';
+import shuffle from '../src/util/shuffle.js';
 
 const mockQuestions = (inputs) => {
   const messages = [];
@@ -24,12 +25,11 @@ const mockRandoms = (numbers) => {
 };
 
 const mockShuffles = (rows) => {
-  MissionUtils.Random.shuffle = jest.fn();
+  const mockShuffle = jest.fn(shuffle);
 
-  rows.reduce(
-    (acc, [firstNumber, numbers]) => acc.mockReturnValueOnce([firstNumber, ...numbers.filter((number) => number !== firstNumber)]),
-    MissionUtils.Random.shuffle,
-  );
+  rows.reduce((acc, [firstNumber, numbers]) => acc.mockReturnValueOnce([firstNumber, ...numbers.filter((number) => number !== firstNumber)]), mockShuffle);
+
+  return mockShuffle;
 };
 
 const getLogSpy = () => {

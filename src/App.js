@@ -1,13 +1,7 @@
 import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
-const SAMPLE = {
-  일식: '규동, 우동, 미소시루, 스시, 가츠동, 오니기리, 하이라이스, 라멘, 오코노미야끼',
-  한식: '김밥, 김치찌개, 쌈밥, 된장찌개, 비빔밥, 칼국수, 불고기, 떡볶이, 제육볶음',
-  중식: '깐풍기, 볶음면, 동파육, 짜장면, 짬뽕, 마파두부, 탕수육, 토마토 달걀볶음, 고추잡채',
-  아시안: '팟타이, 카오 팟, 나시고렝, 파인애플 볶음밥, 쌀국수, 똠얌꿍, 반미, 월남쌈, 분짜',
-  양식: '라자냐, 그라탱, 뇨끼, 끼슈, 프렌치 토스트, 바게트, 스파게티, 피자, 파니니',
-};
+import shuffle from './util/shuffle.js';
 
 /*
 점심 메뉴 추천을 시작합니다.
@@ -82,20 +76,30 @@ const SAMPLE = {
 });
 */
 
+const Menu = {
+  일식: ['규동', '우동', '미소시루', '스시', '가츠동', '오니기리', '하이라이스', '라멘', '오코노미야끼'],
+  한식: ['김밥', '김치찌개', '쌈밥', '된장찌개', '비빔밥', '칼국수', '불고기', '떡볶이', '제육볶음'],
+  중식: ['깐풍기', '볶음면', '동파육', '짜장면', '짬뽕', '마파두부', '탕수육', '토마토 달걀볶음', '고추잡채'],
+  아시안: ['팟타이', '카오 팟', '나시고렝', '파인애플 볶음밥', '쌀국수', '똠얌꿍', '반미', '월남쌈', '분짜'],
+  양식: ['라자냐', '그라탱', '뇨끼', '끼슈', '프렌치 토스트', '바게트', '스파게티', '피자', '파니니'],
+};
+
 //  1이면 일식, 2면 한식, 3이면 중식, 4면 아시안, 5면 양식
 const categories = { 1: '일식', 2: '한식', 3: '중식', 4: '아시안', 5: '양식' };
 
 class App {
   category = [];
 
+  coaches = [];
+
   async run() {
     OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
 
     const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
 
-    const names = nameInput.split(',');
+    this.coaches = nameInput.split(',');
 
-    for (const name of names) {
+    for (const name of this.coaches) {
       await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
     }
     OutputView.printMessage('\n');
@@ -115,7 +119,18 @@ class App {
     }
 
     OutputView.printMessage(`[ 카테고리 | ${this.category[0]} | ${this.category[1]} | ${this.category[2]} | ${this.category[3]} | ${this.category[4]} ]`);
+
+    for (const coach of this.coaches) {
+      OutputView.printMessage(`[ ${coach} | ${this.getMenu(0)} | ${this.getMenu(1)} | ${this.getMenu(2)} | ${this.getMenu(3)} | ${this.getMenu(4)} ]`);
+    }
     OutputView.printMessage('추천을 완료했습니다.\n');
+  }
+
+  getMenu(index) {
+    const foodList = Menu[this.category[index]];
+
+    const menu = shuffle(foodList)[0];
+    return menu;
   }
 }
 
