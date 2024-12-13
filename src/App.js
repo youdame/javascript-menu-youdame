@@ -1,3 +1,4 @@
+// @ts-check
 import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
@@ -90,22 +91,36 @@ const categories = { 1: '일식', 2: '한식', 3: '중식', 4: '아시안', 5: '
 class App {
   category = [];
 
-  coaches = [];
+  /** @type {Record<string,string[]>}} 인벤토리 인스턴스 */
+  coachesInfo = {};
+
+  /*
+  먼저 이름 받고 
+  못 먹는 메뉴를 받는다.. 
+  */
+  getCategoryFromCantEat() {}
 
   async run() {
     OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
 
     const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
 
-    this.coaches = nameInput.split(',');
+    const coachesName = nameInput.split(',');
 
-    for (const name of this.coaches) {
-      await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
+    for (const name of coachesName) {
+      this.coachesInfo[name] = [];
     }
+
+    for (const name of coachesName) {
+      const notFood = await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
+      this.coachesInfo[name].push(notFood);
+    }
+
     OutputView.printMessage('\n');
     OutputView.printMessage('메뉴 추천 결과입니다.\n');
     OutputView.printMessage('[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]');
 
+    // 카테고리 선정
     for (let i = 1; i <= 5; i++) {
       let randomNumber = Random.pickNumberInRange(1, 5);
 
@@ -120,9 +135,11 @@ class App {
 
     OutputView.printMessage(`[ 카테고리 | ${this.category[0]} | ${this.category[1]} | ${this.category[2]} | ${this.category[3]} | ${this.category[4]} ]`);
 
-    for (const coach of this.coaches) {
+    // 메뉴 선정
+    for (const coach of Object.keys(this.coachesInfo)) {
       OutputView.printMessage(`[ ${coach} | ${this.getMenu(0)} | ${this.getMenu(1)} | ${this.getMenu(2)} | ${this.getMenu(3)} | ${this.getMenu(4)} ]`);
     }
+
     OutputView.printMessage('추천을 완료했습니다.\n');
   }
 
