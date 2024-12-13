@@ -89,9 +89,10 @@ const Menu = {
 const categories = { 1: '일식', 2: '한식', 3: '중식', 4: '아시안', 5: '양식' };
 
 class App {
+  /** @type {string[]}} */
   category = [];
 
-  /** @type {Record<string,string[]>}} 인벤토리 인스턴스 */
+  /** @type {Record<string,string[]>}} */
   coachesInfo = {};
 
   /*
@@ -137,17 +138,36 @@ class App {
 
     // 메뉴 선정
     for (const coach of Object.keys(this.coachesInfo)) {
-      OutputView.printMessage(`[ ${coach} | ${this.getMenu(0)} | ${this.getMenu(1)} | ${this.getMenu(2)} | ${this.getMenu(3)} | ${this.getMenu(4)} ]`);
+      OutputView.printMessage(
+        `[ ${coach} | ${this.getMenu(coach, 0)} | ${this.getMenu(coach, 1)} | ${this.getMenu(coach, 2)} | ${this.getMenu(coach, 3)} | ${this.getMenu(coach, 4)} ]`,
+      );
     }
 
     OutputView.printMessage('추천을 완료했습니다.\n');
   }
 
-  getMenu(index) {
-    const foodList = Menu[this.category[index]];
+  getMenu(coach, index) {
+    const notFood = this.coachesInfo[coach];
 
-    const menu = shuffle(foodList)[0];
-    return menu;
+    while (true) {
+      const currentCategory = this.category[index];
+      const foodList = Menu[currentCategory];
+
+      const menu = shuffle(foodList)[0];
+
+      if (!notFood.includes(menu)) {
+        return menu;
+      }
+    }
+
+    /* 못 먹는 음식이면 다시 섞어야함 
+    자기가 못 먹는 음식을 추천하진 않을테니,
+    그걸 알려면 지금 코치가 누구인지, 못 먹는 음식이랑 지금 뽑힌 음식이 같은지 알아야함
+    근데 솔직히 무슨 카테고린지 알아야하나? 
+    성능 따지려면 카테고리부터 따지는 게 맞긴함
+
+    일단은 메뉴 이름이 같은지만 보면 될듯
+    */
   }
 }
 
