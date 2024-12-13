@@ -3,6 +3,7 @@ import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
 import { CATEGORIES, MENU } from './constant/index.js';
+import validateNotEatFood from './validation/validateNotEatFood.js';
 
 class App {
   /** @type {string[]}} */
@@ -15,10 +16,17 @@ class App {
   coachesMenu = {};
 
   async getNotEatFood() {
-    /// 못먹는 메뉴가 메뉴 리스트에 없는 거라면 있는 것만 해달라고 해야하지 않을까?
     for (const name of Object.keys(this.coachesNotEatFoodInfo)) {
-      const notEatFood = await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
-      this.coachesNotEatFoodInfo[name].push(notEatFood);
+      while (true) {
+        try {
+          const notEatFoodInput = await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
+          const notEatFood = validateNotEatFood(notEatFoodInput);
+          this.coachesNotEatFoodInfo[name].push(notEatFood);
+          break;
+        } catch (error) {
+          OutputView.printErrorMessage(error);
+        }
+      }
     }
   }
 
