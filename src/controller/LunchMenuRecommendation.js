@@ -3,7 +3,9 @@
 import { Random } from '@woowacourse/mission-utils';
 import OutputView from '../view/OutputView.js';
 import { CATEGORIES, MENU } from '../constant/index.js';
+import pickNumberInRange from '../util/pickNumberInRange.js';
 
+const CATEGORY_NUMBER = 5;
 class LunchMenuRecommendation {
   /**
    * @constructor
@@ -22,7 +24,7 @@ class LunchMenuRecommendation {
     OutputView.printMessage('메뉴 추천 결과입니다.\n');
     OutputView.printMessage('[ 구분 | 월요일 | 화요일 | 수요일 | 목요일 | 금요일 ]');
 
-    this.selectCategory();
+    this.selectCategories();
     this.printSelectedCategory();
     this.recommendMenus();
     this.printRecommendedMenu();
@@ -30,18 +32,22 @@ class LunchMenuRecommendation {
     OutputView.printMessage('추천을 완료했습니다.\n');
   }
 
-  selectCategory() {
-    for (let i = 1; i <= 5; i++) {
-      let randomNumber = Random.pickNumberInRange(1, 5);
-
-      const filteredCategory = this.category.filter((category) => category === CATEGORIES[randomNumber]);
-
-      if (filteredCategory.length >= 2) {
-        randomNumber = Random.pickNumberInRange(1, 5);
-      }
-
-      this.category.push(CATEGORIES[randomNumber]);
+  selectCategories() {
+    for (let i = 1; i <= CATEGORY_NUMBER; i++) {
+      this.selectCategory();
     }
+  }
+
+  selectCategory() {
+    const randomNumber = pickNumberInRange(1, CATEGORY_NUMBER);
+
+    const selectedCategory = CATEGORIES[randomNumber];
+    const filteredCategory = this.category.filter((category) => category === selectedCategory);
+
+    if (filteredCategory.length < 2) {
+      return this.category.push(selectedCategory);
+    }
+    return this.selectCategory();
   }
 
   recommendMenus() {
