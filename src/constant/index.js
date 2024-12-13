@@ -7,3 +7,7 @@ export const MENU = Object.freeze({
 });
 
 export const CATEGORIES = Object.freeze({ 1: '일식', 2: '한식', 3: '중식', 4: '아시안', 5: '양식' });
+
+export const INPUT_PATTERN = {
+  name: /^([가-힣a-zA-Z]+)(,([가-힣a-zA-Z]+))*$/,
+};
