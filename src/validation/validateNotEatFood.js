@@ -26,7 +26,7 @@ const validateNameFormat = (input) => {
 
   names.forEach((name) => {
     if (!allMenu.includes(name)) {
-      throwError(`[ERROR] 없는 메뉴입니다. 다시 입력해주세요`);
+      throwError(`[ERROR] 없는 메뉴를 포함해서 입력하셨습니다. 다시 입력해주세요`);
     }
   });
   return names;

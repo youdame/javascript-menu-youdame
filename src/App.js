@@ -15,18 +15,10 @@ class App {
   /** @type {Record<string,string[]>}} */
   coachesMenu = {};
 
-  async getNotEatFood() {
+  async getNotEatFoods() {
     for (const name of Object.keys(this.coachesNotEatFoodInfo)) {
-      while (true) {
-        try {
-          const notEatFoodInput = await InputView.readUserInput(`${name}(이)가 못 먹는 메뉴를 입력해 주세요.\n`);
-          const notEatFood = validateNotEatFood(notEatFoodInput);
-          this.coachesNotEatFoodInfo[name].push(notEatFood);
-          break;
-        } catch (error) {
-          OutputView.printErrorMessage(error);
-        }
-      }
+      const notEatFood = await InputView.getNotEatFood(name);
+      this.coachesNotEatFoodInfo[name] = notEatFood;
     }
   }
 
@@ -44,7 +36,7 @@ class App {
     const coachesName = await InputView.getCoachesName();
     this.putCoachesName(coachesName);
 
-    await this.getNotEatFood();
+    await this.getNotEatFoods();
 
     this.printResultMessage();
   }
