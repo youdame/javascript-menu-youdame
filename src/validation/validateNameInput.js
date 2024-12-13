@@ -2,20 +2,9 @@ import checkEmptyInput from '../util/checkEmptyInput.js';
 import throwError from '../util/throw-error.js';
 import runValidators from './run-validator.js';
 
-// 한 번만
-const pattern = {
-  bracketNameNumber: /^\[([가-힣a-zA-Z]+)-(\d+)\]$/, // [이름-숫자]
-  nameNumber: /^([가-힣a-zA-Z]+)-(\d+)$/, // 이름-숫자
-  number: /^\d+$/, // 숫자
-  name: /^([가-힣a-zA-Z]+)$/, // 이름
-};
-
 // 컴마로 여러번 반복
 const patterns = {
-  bracketNameNumber: /^\[([가-힣a-zA-Z]+)-(\d+)\](,\[([가-힣a-zA-Z]+)-(\d+)\])*$/, // [이름-숫자] 반복
-  nameNumber: /^([가-힣a-zA-Z]+)-(\d+)(,([가-힣a-zA-Z]+)-(\d+))*$/, // 이름-숫자 반복
-  number: /^\d+(,\d+)*$/, // 숫자 반복
-  name: /^([가-힣a-zA-Z]+)(,([가-힣a-zA-Z]+))*$/, // 이름 반복
+  name: /^([가-힣a-zA-Z]+)(,([가-힣a-zA-Z]+))*$/,
 };
 
 export const ERROR_MESSAGES = {
@@ -23,15 +12,10 @@ export const ERROR_MESSAGES = {
 };
 
 // 정규표현식 패턴
-const namePattern = /^[가-힣a-zA-Z]{2,4}$/; // 한글/영어로 이루어진 1~10자의 닉네임
-const MINIMUM_COACH_NUMBER = 2; // 최소 인원 수
-const MAXIMUM_COACH_NUMBER = 5; // 최대 인원 수
+const namePattern = /^[가-힣a-zA-Z]{2,4}$/;
+const MINIMUM_COACH_NUMBER = 2;
+const MAXIMUM_COACH_NUMBER = 5;
 
-/*
-1) 이름이 ,로 연결 
-- 코치의 이름은 최소 2글자, 최대 4글자이다.
-- 코치는 최소 2명, 최대 5명까지 식사를 함께 한다.
-*/
 const validateFormat = (input) => {
   if (!patterns.name.test(input)) {
     throwError('[ERROR] 입력값이 형식에 맞지 않습니다. 올바른 형식으로 입력해 주세요.');
