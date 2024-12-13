@@ -116,30 +116,17 @@ class App {
     OutputView.printMessage('추천을 완료했습니다.\n');
   }
 
-  /*
-  - 각 코치에게 한 주에 중복되지 않는 메뉴를 추천해야 한다.
-    - 예시)
-        - 구구: 비빔밥, 김치찌개, 쌈밥, 규동, 우동 → 한식을 3회 먹으므로 불가능
-        - 토미: 비빔밥, 비빔밥, 규동, 우동, 볶음면 → 한 코치가 같은 메뉴를 먹으므로 불가능
-        - 제임스: 비빔밥, 김치찌개, 스시, 가츠동, 짜장면 → 매일 다른 메뉴를 먹으므로 가능
-        - 포코: 비빔밥, 김치찌개, 스시, 가츠동, 짜장면 → 제임스와 메뉴가 같지만, 포코는 매번 다른 메뉴를 먹으므로 가능
-  */
-
   getMenu(coach, index) {
     const notFood = this.coachesInfo[coach];
 
-    /*
-  지금 메뉴가 이전 날의 음식의 카테고리와 동일 할 때, 같은 메뉴가 나온다면 다시 뽑아야함
-  그냥 이전에 먹었던 메뉴를 저장한다음에 동일한 거 먹는지 안 먹는지 확인하면 됨
-  */
     while (true) {
       const currentCategory = this.category[index];
       const foodList = Menu[currentCategory];
 
       const menu = foodList[Random.shuffle(foodList)[0] - 1];
 
-      // 못 먹는 음식에 속하는지 확인
-      if (!notFood.includes(menu)) {
+      // 못 먹는 음식이거나 중복된 음식이 아니라면
+      if (!notFood.includes(menu) && !this.coachesMenu[coach].includes(menu)) {
         return menu;
       }
     }
