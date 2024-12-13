@@ -15,10 +15,7 @@ class App {
   /** @type {Record<string,string[]>}} */
   coachesMenu = {};
 
-  async run() {
-    // 첫 출력
-    OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
-
+  async getCoachesName() {
     while (true) {
       try {
         const nameInput = await InputView.readUserInput('코치의 이름을 입력해 주세요. (, 로 구분)\n');
@@ -34,7 +31,13 @@ class App {
         OutputView.printErrorMessage(error);
       }
     }
+  }
 
+  async run() {
+    // 첫 출력
+    OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
+
+    await this.getCoachesName();
     /// 못먹는 메뉴가 메뉴 리스트에 없는 거라면 있는 것만 해달라고 해야하지 않을까?
 
     for (const name of Object.keys(this.coachesInfo)) {
@@ -87,7 +90,9 @@ class App {
       const currentCategory = this.category[index];
       const foodList = MENU[currentCategory];
 
-      const menu = foodList[Random.shuffle(foodList)[0] - 1];
+      const numberArray = Array.from({ length: 9 }, (v, i) => i + 1);
+
+      const menu = foodList[Random.shuffle(numberArray)[0] - 1];
 
       // 못 먹는 음식이거나 중복된 음식이 아니라면
       if (!notFood.includes(menu) && !this.coachesMenu[coach].includes(menu)) {
