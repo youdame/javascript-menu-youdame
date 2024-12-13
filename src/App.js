@@ -3,7 +3,6 @@ import { Random } from '@woowacourse/mission-utils';
 import InputView from './view/InputView.js';
 import OutputView from './view/OutputView.js';
 import { CATEGORIES, MENU } from './constant/index.js';
-import validateNotEatFood from './validation/validateNotEatFood.js';
 
 class App {
   /** @type {string[]}} */
@@ -15,11 +14,16 @@ class App {
   /** @type {Record<string,string[]>}} */
   coachesMenu = {};
 
-  async getNotEatFoods() {
-    for (const name of Object.keys(this.coachesNotEatFoodInfo)) {
-      const notEatFood = await InputView.getNotEatFood(name);
-      this.coachesNotEatFoodInfo[name] = notEatFood;
-    }
+  async run() {
+    // 첫 출력
+    OutputView.printStartMessage();
+
+    const coachesName = await InputView.getCoachesName();
+    this.putCoachesName(coachesName);
+
+    await this.getNotEatFoods();
+
+    this.printResultMessage();
   }
 
   putCoachesName(coachesName) {
@@ -29,16 +33,11 @@ class App {
     }
   }
 
-  async run() {
-    // 첫 출력
-    this.printStartMessage();
-
-    const coachesName = await InputView.getCoachesName();
-    this.putCoachesName(coachesName);
-
-    await this.getNotEatFoods();
-
-    this.printResultMessage();
+  async getNotEatFoods() {
+    for (const name of Object.keys(this.coachesNotEatFoodInfo)) {
+      const notEatFood = await InputView.getNotEatFood(name);
+      this.coachesNotEatFoodInfo[name] = notEatFood;
+    }
   }
 
   printResultMessage() {
@@ -52,10 +51,6 @@ class App {
     this.printRecommendedMenu();
 
     OutputView.printMessage('추천을 완료했습니다.\n');
-  }
-
-  printStartMessage() {
-    OutputView.printMessage('점심 메뉴 추천을 시작합니다.');
   }
 
   selectCategory() {
